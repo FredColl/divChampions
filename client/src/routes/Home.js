@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 
 import Table from '../components/Table';
+
+const HomeWrapper = styled.div`
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+`;
 
 class Home extends Component {
   state = {
@@ -31,7 +38,8 @@ class Home extends Component {
     if (!this.state.response.data) return null;
     const array = this.state.response.data;
     return (
-      <div className="Home">
+      <HomeWrapper>
+        <h1>Dividend Champions list</h1>
         <form onSubmit={this.handleSubmit}>
           <div className="yieldInput">
             <label>
@@ -46,7 +54,7 @@ class Home extends Component {
           </div>
         </form>
         <Table data={array} avgYield={this.state.avgYield} />
-      </div>
+      </HomeWrapper>
     );
   }
 }
