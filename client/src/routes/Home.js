@@ -72,7 +72,7 @@ class Home extends Component {
     const array = this.state.response.data;
     return (
       <HomeWrapper>
-        <h1>Dividend Champions list</h1>
+        <h1>US Dividend Champions list</h1>
         <FilterContainer>
           <FilterItem>
             <form onSubmit={this.handleSubmit}>
