@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Home from './routes/Home';
+import Predict from './routes/Predict';
 import StepGuide from './routes/StepGuide';
 
 const AppContainer = styled.div`
@@ -41,6 +42,7 @@ class App extends Component {
           </Menu>
           <Body>
             <Route exact path="/" component={Home} />
+            <Route exact path="/predict" component={Predict} />
             <Route exact path="/stepguide" component={StepGuide} />
           </Body>
         </AppContainer>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Table from '../components/Table';
@@ -106,12 +107,19 @@ class Home extends Component {
             </FilterLabel>
           </FilterItem>
           <FilterItem>
-            <button
-              className="btn btn-primary btn-lg"
-              disabled={this.state.checked.length === 0}
+            <Link
+              to={{
+                pathname: "/predict",
+                state: { current: this.state.checked }
+              }}
             >
-              Predict
-            </button>
+              <button
+                className="btn btn-primary btn-lg"
+                disabled={this.state.checked.length === 0}
+              >
+                Predict
+              </button>
+            </Link>
           </FilterItem>
         </FilterContainer>
         <Table

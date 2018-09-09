@@ -23,7 +23,7 @@ class Table extends Component {
     return sum >= 9.0; // Best practics
   };
 
-  handleInputChange = event => {
+  handleInputChange = (event, obj) => {
     const target = event.target;
     const checked = target.checked;
     const name = target.name;
@@ -31,7 +31,7 @@ class Table extends Component {
     if (checked) {
       this.setState(
         {
-          checked: [...this.state.checked, [name]]
+          checked: [...this.state.checked, obj]
         },
         () => this.props.onChange(this.state.checked)
       );
@@ -46,6 +46,7 @@ class Table extends Component {
   };
 
   render() {
+    console.log(this.state.checked);
     const data = this.props.data;
     if (!data) return null;
     let count = 0;
@@ -87,7 +88,7 @@ class Table extends Component {
                   <td>
                     <input
                       name={c.Symbol}
-                      onChange={this.handleInputChange}
+                      onChange={e => this.handleInputChange(e, c)}
                       type="checkbox"
                     />
                   </td>
