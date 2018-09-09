@@ -7,20 +7,25 @@ import styled from 'styled-components';
 import Home from './routes/Home';
 import StepGuide from './routes/StepGuide';
 
+const AppContainer = styled.div`
+  text-align: center;
+  box-sizing: border-box;
+`;
+
 const Menu = styled.header`
   background-color: #000;
   position: fixed;
   height: 100%;
   color: white;
-  left: 0;
-  width: 125px;
+  width: 9%;
   display: flex;
   flex-direction: column;
 `;
 
 const Body = styled.div`
-  margin-left: 138px;
-  width: 100%;
+  width: 91%;
+  margin-left: 9%;
+  padding: 16px;
   box-sizing: border-box;
 `;
 
@@ -28,7 +33,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div className="App">
+        <AppContainer>
           <Menu>
             <h1 className="App-title">Dividend Champions Calculator</h1>
             <Link to="/">List</Link>
@@ -38,7 +43,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/stepguide" component={StepGuide} />
           </Body>
-        </div>
+        </AppContainer>
       </Router>
     );
   }
