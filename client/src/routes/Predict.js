@@ -11,6 +11,7 @@ class Predict extends Component {
     super(props);
     this.state = {
       data: [],
+      reinvestDivident: true,
       initialInvestment: 1000,
       nrOfYears: 50
     };
@@ -28,12 +29,17 @@ class Predict extends Component {
   }
 
   calculateYearlyDivident(data) {
-    const { initialInvestment, nrOfYears } = this.state;
+    const { initialInvestment, nrOfYears, reinvestDivident } = this.state;
+    let investment = initialInvestment;
     return Array(nrOfYears)
       .fill()
       .reduce((acc, _, i) => {
-        const investment = initialInvestment;
         const dividentYield = this.calculateDividentYield(i, data.DGR1yr);
+
+        if (reinvestDivident) {
+          investment = investment * (dividentYield + 1);
+        }
+
         const dividend = investment * dividentYield;
         acc.push(Math.round(dividend * 100) / 100);
         return acc;
