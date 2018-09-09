@@ -13,7 +13,7 @@ class Predict extends Component {
       data: [],
       reinvestDivident: true,
       initialInvestment: 1000,
-      nrOfYears: 50
+      nrOfYears: 30
     };
     this.dividendYield = 0;
   }
@@ -46,24 +46,37 @@ class Predict extends Component {
       }, []);
   }
 
+  createData(predictions) {
+    const temp = predictions.reduce((acc, current, i) => {
+      acc.push({ name: i, hej: current });
+      return acc;
+    }, []);
+    return temp;
+  }
+
   componentDidMount() {
     const data = this.props.location.state && this.props.location.state.current;
     this.dividendYield = data[0].Yield;
 
-    const temp2 = this.calculateYearlyDivident(data[0]);
-    console.log(temp2);
+    const predictions = this.calculateYearlyDivident(data[0]);
+    const graphData = this.createData(predictions);
+    console.log(graphData);
+    this.setState({
+      data: graphData
+    });
   }
 
   render() {
-    const data = [
-      { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
-      { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
-      { name: "Page C", uv: 2000, pv: 9800, amt: 2290 },
-      { name: "Page D", uv: 2780, pv: 3908, amt: 2000 },
-      { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
-      { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
-      { name: "Page G", uv: 3490, pv: 4300, amt: 2100 }
-    ];
+    const { data } = this.state;
+    // const data = [
+    //   { name: "Page A", uv: 4000, pv: 2400, amt: 2400 },
+    //   { name: "Page B", uv: 3000, pv: 1398, amt: 2210 },
+    //   { name: "Page C", uv: 2000, pv: 9800, amt: 2290 },
+    //   { name: "Page D", uv: 2780, pv: 3908, amt: 2000 },
+    //   { name: "Page E", uv: 1890, pv: 4800, amt: 2181 },
+    //   { name: "Page F", uv: 2390, pv: 3800, amt: 2500 },
+    //   { name: "Page G", uv: 3490, pv: 4300, amt: 2100 }
+    // ];
     return (
       <PredictWrapper>
         <h1>Predictions</h1>
@@ -78,8 +91,7 @@ class Predict extends Component {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="hej" stroke="#8884d8" />
         </LineChart>
       </PredictWrapper>
     );
