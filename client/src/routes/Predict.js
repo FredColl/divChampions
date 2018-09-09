@@ -7,22 +7,22 @@ const PredictWrapper = styled.div`
 `;
 
 class Predict extends Component {
-  state = {
-    data: [],
-    dividendYield: 0,
-    initialInvestment: 1000,
-    nrOfYears: 50
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      initialInvestment: 1000,
+      nrOfYears: 50
+    };
+    this.dividendYield = 0;
+  }
 
   calculateDividentYield(year, dgr) {
-    const yieldValue = this.state.dividendYield;
-    if (year === 0) return yieldValue / 100 + 1;
+    const yieldValue = this.dividendYield;
+    if (year === 0) return yieldValue / 100;
 
     const newDividendYield = yieldValue * (dgr / 100 + 1);
-
-    this.setState({
-      dividendYield: newDividendYield
-    });
+    this.dividendYield = newDividendYield;
 
     return newDividendYield / 100;
   }
@@ -42,15 +42,10 @@ class Predict extends Component {
 
   componentDidMount() {
     const data = this.props.location.state && this.props.location.state.current;
-    this.setState(
-      {
-        dividendYield: data[0].Yield
-      },
-      () => {
-        const temp2 = this.calculateYearlyDivident(data[0]);
-        console.log(temp2);
-      }
-    );
+    this.dividendYield = data[0].Yield;
+
+    const temp2 = this.calculateYearlyDivident(data[0]);
+    console.log(temp2);
   }
 
   render() {
