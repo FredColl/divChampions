@@ -16,7 +16,8 @@ class Home extends Component {
     checked: [],
     response: {},
     avgYield: 0,
-    multiplier: 1
+    multiplier: 1,
+    mrFilter: false
   };
 
   componentDidMount() {
@@ -36,7 +37,7 @@ class Home extends Component {
 
   handleChange = event => {
     const target = event.target;
-    const value = target.value;
+    const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({ [name]: value });
   };
@@ -86,6 +87,17 @@ class Home extends Component {
             </FilterLabel>
           </FilterItem>
           <FilterItem>
+            <FilterLabel>
+              MR% + Div filter
+              <input
+                type="checkbox"
+                name="mrFilter"
+                value={this.state.mrFilter}
+                onChange={this.handleChange}
+              />
+            </FilterLabel>
+          </FilterItem>
+          <FilterItem>
             <Link
               to={{
                 pathname: "/predict",
@@ -105,6 +117,7 @@ class Home extends Component {
           data={array}
           avgYield={this.state.avgYield}
           multiplier={this.state.multiplier}
+          mrFilter={this.state.mrFilter}
           onChange={this.onSelectedCompany}
         />
       </HomeWrapper>

@@ -19,8 +19,6 @@ class Predict extends Component {
 
   calculateYearlyDivident(data) {
     const { initialInvestment, nrOfYears, reinvestDividend } = this.state;
-
-    //const dividend = data.Dividend;
     let investment = initialInvestment;
     let dividentYield = data.Yield / 100;
     const dgrInProcent = data.DGR1yr / 100 + 1;

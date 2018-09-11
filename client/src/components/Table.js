@@ -19,8 +19,8 @@ class Table extends Component {
   };
 
   validMarginalRevenuePlusYield = (yieldValue, marginalRevenue) => {
-    const sum = this.sum(yieldValue, marginalRevenue);
-    return sum >= 9.0; // Best practics
+    const { mrFilter } = this.props;
+    return mrFilter ? this.sum(yieldValue, marginalRevenue) >= 9 : true;
   };
 
   handleInputChange = (event, obj) => {
