@@ -45,7 +45,7 @@ class Predict extends Component {
     const predictions = this.calculateYearlyDivident(rawData[0]);
 
     const graphData = predictions.reduce((acc, current, i) => {
-      acc.push({ name: i, hej: current });
+      acc.push({ name: i, [rawData[0].Name]: current });
       return acc;
     }, []);
 
@@ -128,7 +128,11 @@ class Predict extends Component {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="hej" stroke="#8884d8" />
+          <Line
+            type="monotone"
+            dataKey={rawData[0] && rawData[0].Name}
+            stroke="#8884d8"
+          />
         </LineChart>
       </PredictWrapper>
     );
