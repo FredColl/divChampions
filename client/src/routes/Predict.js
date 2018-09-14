@@ -20,6 +20,8 @@ class Predict extends Component {
   calculateYearlyDivident(data) {
     const { initialInvestment, nrOfYears, reinvestDividend } = this.state;
     let investment = initialInvestment;
+
+    // här
     let dividentYield = data.Yield / 100;
     const dgrInProcent = data.DGR1yr / 100 + 1;
 
@@ -35,35 +37,17 @@ class Predict extends Component {
         }
 
         const dividend = investment * dividentYield;
-        acc.push(Math.round(dividend * 100) / 100);
+        acc.push({ name: i, [data.Name]: Math.round(dividend * 100) / 100 });
         return acc;
       }, []);
   }
 
-  calculateGraphData = () => {
-    const { rawData } = this.state;
-    const predictions = this.calculateYearlyDivident(rawData[0]);
-
-    const graphData = predictions.reduce((acc, current, i) => {
-      acc.push({ name: i, [rawData[0].Name]: current });
-      return acc;
-    }, []);
-
-    this.setState({
-      data: graphData
-    });
-  };
-
   componentDidMount() {
     const data = this.props.location.state && this.props.location.state.current;
-    this.dividendYield = data[0].Yield;
 
-    this.setState(
-      {
-        rawData: data
-      },
-      () => this.calculateGraphData()
-    );
+    this.setState({
+      rawData: data
+    });
   }
 
   handleChange = event => {
@@ -73,8 +57,22 @@ class Predict extends Component {
     this.setState({ [name]: value });
   };
 
+  temp = rawData => {
+    const companyData = rawData.map(this.calculateYearlyDivident);
+    const merged = Array(nrOfYears)
+      .fill()
+      .map((_, i) => {
+        companyData.reduce((acc, company) => {
+          return {};
+        });
+      });
+  };
+
   render() {
-    const { data, rawData } = this.state;
+    const { rawData } = this.state;
+
+    const data = this.temp(rawData);
+    //   rawData.length > 0 ? this.calculateYearlyDivident(rawData[0]) : [];
     return (
       <PredictWrapper>
         <h1>Predictions</h1>
@@ -104,7 +102,7 @@ class Predict extends Component {
             <FilterLabel>
               <button
                 className="btn btn-primary btn-md"
-                onClick={this.calculateGraphData}
+                onClick={() => this.calculateGraphData(this.state.rawData)}
               >
                 Filter
               </button>
