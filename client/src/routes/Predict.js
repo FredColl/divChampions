@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
-import styled from 'styled-components';
-
-import { FilterContainer, FilterItem, FilterLabel } from '../Styles';
+import React, { Component } from "react";
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import styled from "styled-components";
+import { FilterContainer, FilterItem, FilterLabel } from "../Styles";
 
 const PredictWrapper = styled.div`
   text-align: left;
 `;
+
+const colors = ["#aaa", "#ddd", "#0ff", "#333", "#a32", "#d3f", "#2dd"];
 
 class Predict extends Component {
   state = {
@@ -17,7 +18,7 @@ class Predict extends Component {
     nrOfYears: 30
   };
 
-  calculateYearlyDivident(data) {
+  calculateYearlyDividend = data => {
     const { initialInvestment, nrOfYears, reinvestDividend } = this.state;
     let investment = initialInvestment;
 
@@ -40,7 +41,7 @@ class Predict extends Component {
         acc.push({ name: i, [data.Name]: Math.round(dividend * 100) / 100 });
         return acc;
       }, []);
-  }
+  };
 
   componentDidMount() {
     const data = this.props.location.state && this.props.location.state.current;
@@ -58,14 +59,22 @@ class Predict extends Component {
   };
 
   temp = rawData => {
-    const companyData = rawData.map(this.calculateYearlyDivident);
-    const merged = Array(nrOfYears)
+    if (rawData.length === 0) return [];
+    const dataForCompanies = rawData.map(this.calculateYearlyDividend);
+
+    const merged = Array(this.state.nrOfYears)
       .fill()
-      .map((_, i) => {
-        companyData.reduce((acc, company) => {
-          return {};
-        });
+      .map((_, year) => {
+        return dataForCompanies.reduce(
+          (acc, company) => {
+            return { ...acc, ...company[year] };
+          },
+          { name: year }
+        );
       });
+    console.log(merged);
+
+    return merged;
   };
 
   render() {
@@ -126,11 +135,14 @@ class Predict extends Component {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line
-            type="monotone"
-            dataKey={rawData[0] && rawData[0].Name}
-            stroke="#8884d8"
-          />
+          {rawData.map((company, i) => (
+            <Line
+              key={company.Name}
+              type="monotone"
+              dataKey={company && company.Name}
+              stroke={colors[i % colors.length]}
+            />
+          ))}
         </LineChart>
       </PredictWrapper>
     );
