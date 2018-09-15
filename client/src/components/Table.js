@@ -10,6 +10,10 @@ class Table extends Component {
     checked: []
   };
 
+  nextStep = styled.tr`
+    font-size: 12px;
+  `;
+
   validYield(column) {
     return column.Yield > this.props.avgYield * this.props.multiplier;
   }

@@ -1,8 +1,14 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  text-align: left;
+`;
 
 const StepGuide = () => {
   return (
-    <div>
+    <Wrapper>
+      <h1>How to use the tool</h1>
       <p>
         1. The list helps filtering out the companies with the most{" "}
         <b>Quality</b>
@@ -20,7 +26,7 @@ const StepGuide = () => {
         are execeptions, circular market companies might need to, part of their
         operation to do so, but still a warning flag.
       </p>
-    </div>
+    </Wrapper>
   );
 };
 

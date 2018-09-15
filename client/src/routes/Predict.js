@@ -17,6 +17,10 @@ const CardContainer = styled.div`
 
 const colors = [
   "#99b433",
+  "#99cc33",
+  "#009900",
+  "#990099",
+  "#ff0099",
   "#9f00a7",
   "#00aba9",
   "#00aba9",
