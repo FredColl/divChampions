@@ -9,6 +9,12 @@ const PredictWrapper = styled.div`
   text-align: left;
 `;
 
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 16px 0;
+`;
+
 const colors = [
   "#99b433",
   "#9f00a7",
@@ -129,15 +135,19 @@ class Predict extends Component {
             </FilterLabel>
           </FilterItem>
         </FilterContainer>
-        {/* <div>
-          {this.state.nrOfYears}
-          initialInvestment: ${this.state.initialInvestment}
-        </div> */}
-        <div>
-          {rawData.map(company => {
-            return <CompanyCard {...company} key={company.Name} />;
+
+        <CardContainer>
+          {rawData.map((company, i) => {
+            return (
+              <CompanyCard
+                {...company}
+                key={company.Name}
+                color={colors[i % colors.length]}
+              />
+            );
           })}
-        </div>
+        </CardContainer>
+        <h3>Graph</h3>
         <LineChart
           width={730}
           height={250}
