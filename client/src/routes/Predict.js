@@ -1,13 +1,23 @@
-import React, { Component } from "react";
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
-import styled from "styled-components";
-import { FilterContainer, FilterItem, FilterLabel } from "../Styles";
+import React, { Component } from 'react';
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
+import styled from 'styled-components';
+
+import CompanyCard from '../components/CompanyCard';
+import { FilterContainer, FilterItem, FilterLabel } from '../Styles';
 
 const PredictWrapper = styled.div`
   text-align: left;
 `;
 
-const colors = ["#aaa", "#ddd", "#0ff", "#333", "#a32", "#d3f", "#2dd"];
+const colors = [
+  "#99b433",
+  "#9f00a7",
+  "#00aba9",
+  "#00aba9",
+  "#00aba9",
+  "#da532c",
+  "#b91d47"
+];
 
 class Predict extends Component {
   state = {
@@ -21,26 +31,23 @@ class Predict extends Component {
   calculateYearlyDividend = data => {
     const { initialInvestment, nrOfYears, reinvestDividend } = this.state;
     let investment = initialInvestment;
-
-    // här
     let dividentYield = data.Yield / 100;
-    const dgrInProcent = data.DGR1yr / 100 + 1;
+    const dgrInProcent = data.DGR10yr / 100 + 1;
 
-    return Array(nrOfYears)
-      .fill()
-      .reduce((acc, _, i) => {
-        if (i !== 0) {
-          dividentYield = dgrInProcent * dividentYield;
-        }
+    const t = new Array(nrOfYears).fill().reduce((acc, _, i) => {
+      if (i !== 0) {
+        dividentYield = dgrInProcent * dividentYield;
+      }
 
-        if (reinvestDividend) {
-          investment = investment * (dividentYield + 1);
-        }
+      if (reinvestDividend) {
+        investment = investment * (dividentYield + 1);
+      }
 
-        const dividend = investment * dividentYield;
-        acc.push({ name: i, [data.Name]: Math.round(dividend * 100) / 100 });
-        return acc;
-      }, []);
+      const dividend = investment * dividentYield;
+      acc.push({ name: i, [data.Name]: Math.round(dividend * 100) / 100 });
+      return acc;
+    }, []);
+    return t;
   };
 
   componentDidMount() {
@@ -58,7 +65,8 @@ class Predict extends Component {
     this.setState({ [name]: value });
   };
 
-  temp = rawData => {
+  graphData = () => {
+    const { rawData } = this.state;
     if (rawData.length === 0) return [];
     const dataForCompanies = rawData.map(this.calculateYearlyDividend);
 
@@ -72,16 +80,13 @@ class Predict extends Component {
           { name: year }
         );
       });
-    console.log(merged);
-
     return merged;
   };
 
   render() {
-    const { rawData } = this.state;
+    const { rawData, nrOfYears } = this.state;
+    const data = this.graphData();
 
-    const data = this.temp(rawData);
-    //   rawData.length > 0 ? this.calculateYearlyDivident(rawData[0]) : [];
     return (
       <PredictWrapper>
         <h1>Predictions</h1>
@@ -99,6 +104,17 @@ class Predict extends Component {
           </FilterItem>
           <FilterItem>
             <FilterLabel>
+              Number of years
+              <input
+                type="number"
+                name="nrOfYears"
+                value={this.state.nrOfYears}
+                onChange={this.handleChange}
+              />
+            </FilterLabel>
+          </FilterItem>
+          <FilterItem>
+            <FilterLabel>
               Reinvest dividend
               <input
                 type="checkbox"
@@ -109,20 +125,18 @@ class Predict extends Component {
           </FilterItem>
           <FilterItem>
             <FilterLabel>
-              <button
-                className="btn btn-primary btn-md"
-                onClick={() => this.calculateGraphData(this.state.rawData)}
-              >
-                Filter
-              </button>
+              <button onClick={this.graphData} />
             </FilterLabel>
           </FilterItem>
         </FilterContainer>
-        <div>
+        {/* <div>
+          {this.state.nrOfYears}
           initialInvestment: ${this.state.initialInvestment}
-          DGR 1yr:
-          {rawData[0] && rawData[0].DGR1yr}
-          Yield: {rawData[0] && rawData[0].Yield}
+        </div> */}
+        <div>
+          {rawData.map(company => {
+            return <CompanyCard {...company} key={company.Name} />;
+          })}
         </div>
         <LineChart
           width={730}
