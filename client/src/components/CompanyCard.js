@@ -14,12 +14,13 @@ const CompanyCard = props => {
     transition: 0.3s;
   `;
 
-  const { Name, Yield, DGR10yr } = props;
+  const { Name, Yield, DGR10yr, Symbol } = props;
   return (
     <Card>
       <div>
         <b>{Name}</b>
       </div>
+      <div>{Symbol}</div>
       <div>Yield: {Yield} % </div>
       <div>CAGR (10): {DGR10yr} %</div>
     </Card>

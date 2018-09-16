@@ -17,13 +17,13 @@ const CardContainer = styled.div`
 
 const colors = [
   "#99b433",
-  "#99cc33",
-  "#009900",
   "#990099",
   "#ff0099",
   "#9f00a7",
+  "#009900",
   "#00aba9",
   "#00aba9",
+  "#99cc33",
   "#00aba9",
   "#da532c",
   "#b91d47"
@@ -34,29 +34,36 @@ class Predict extends Component {
     rawData: [],
     data: [],
     reinvestDividend: false,
+    growthRate: false,
     initialInvestment: 1000,
     nrOfYears: 30
   };
 
   calculateYearlyDividend = data => {
-    const { initialInvestment, nrOfYears, reinvestDividend } = this.state;
+    const {
+      initialInvestment,
+      nrOfYears,
+      reinvestDividend,
+      growthRate
+    } = this.state;
     let investment = initialInvestment;
     let dividentYield = data.Yield / 100;
     const dgrInProcent = data.DGR10yr / 100 + 1;
 
     const t = new Array(nrOfYears).fill().reduce((acc, _, i) => {
-      if (i !== 0) {
-        dividentYield = dgrInProcent * dividentYield;
-      }
+      const dividend = Math.round(investment * dividentYield);
+
+      if (growthRate) dividentYield = dgrInProcent * dividentYield;
 
       if (reinvestDividend) {
-        investment = investment * (dividentYield + 1);
+        investment = Math.round(investment * (dividentYield + 1));
       }
 
-      const dividend = investment * dividentYield;
-      acc.push({ name: i, [data.Name]: Math.round(dividend * 100) / 100 });
+      console.log(data.Name, investment, i, dividend, dividentYield);
+      acc.push({ name: i, [data.Name]: dividend });
       return acc;
     }, []);
+
     return t;
   };
 
@@ -94,7 +101,7 @@ class Predict extends Component {
   };
 
   render() {
-    const { rawData, nrOfYears } = this.state;
+    const { rawData, InvestmentArray } = this.state;
     const data = this.graphData();
 
     return (
@@ -135,7 +142,12 @@ class Predict extends Component {
           </FilterItem>
           <FilterItem>
             <FilterLabel>
-              <button onClick={this.graphData} />
+              With dividend growth rate
+              <input
+                type="checkbox"
+                name="growthRate"
+                onChange={this.handleChange}
+              />
             </FilterLabel>
           </FilterItem>
         </FilterContainer>
