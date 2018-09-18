@@ -154,12 +154,15 @@ class Predict extends Component {
 
         <CardContainer>
           {rawData.map((company, i) => {
+            const link = `https://www.dividendchannel.com/symbol/${company.Symbol.toLowerCase()}/chart/`;
             return (
-              <CompanyCard
-                {...company}
-                key={company.Name}
-                color={colors[i % colors.length]}
-              />
+              <a target="_blank" href={link}>
+                <CompanyCard
+                  {...company}
+                  key={company.Name}
+                  color={colors[i % colors.length]}
+                />
+              </a>
             );
           })}
         </CardContainer>
