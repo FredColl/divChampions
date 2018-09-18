@@ -36,7 +36,7 @@ class Predict extends Component {
     reinvestDividend: false,
     growthRate: false,
     initialInvestment: 1000,
-    nrOfYears: 30
+    nrOfYears: 26
   };
 
   calculateYearlyDividend = data => {
@@ -54,13 +54,12 @@ class Predict extends Component {
       const dividend = Math.round(investment * dividentYield);
 
       if (growthRate) dividentYield = dgrInProcent * dividentYield;
-
-      if (reinvestDividend) {
-        investment = Math.round(investment * (dividentYield + 1));
-      }
-
       console.log(data.Name, investment, i, dividend, dividentYield);
+      if (reinvestDividend) {
+        investment = investment + dividend;
+      }
       acc.push({ name: i, [data.Name]: dividend });
+
       return acc;
     }, []);
 
